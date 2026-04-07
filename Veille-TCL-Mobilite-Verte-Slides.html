@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veille Stratégique — TCL & Mobilité Verte</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display&display=swap');
+
+:root {
+  --black: #0A0A0A;
+  --dark: #1A1A1A;
+  --surface: #222222;
+  --white: #FFFFFF;
+  --offwhite: #F5F5F5;
+  --red: #E3242B;
+  --red-dark: #B91C22;
+  --red-light: rgba(227,36,43,0.12);
+  --muted: #999999;
+  --muted-light: #666666;
+  --green: #4CAF50;
+  --orange: #FF9800;
+  --blue: #42A5F5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-y: scroll; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+
+.slide {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 6vw, 5rem) clamp(2rem, 8vw, 8rem);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== NAV DOTS ===== */
+.nav-dots {
+  position: fixed;
+  right: clamp(1rem, 2vw, 2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.nav-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--muted-light);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.nav-dot:hover, .nav-dot.active {
+  background: var(--red);
+  transform: scale(1.4);
+}
+
+/* ===== SLIDE COUNTER ===== */
+.slide-label {
+  position: absolute;
+  top: clamp(1.5rem, 3vw, 2.5rem);
+  left: clamp(2rem, 8vw, 8rem);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.slide-label span { color: var(--red); }
+
+/* ===== SLIDE 0 — COVER ===== */
+.slide-cover {
+  background: var(--black);
+  text-align: center;
+  position: relative;
+}
+
+.slide-cover::before {
+  content: '';
+  position: absolute;
+  top: -30%; left: -20%;
+  width: 140%; height: 160%;
+  background: radial-gradient(ellipse at 30% 40%, rgba(227,36,43,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 70%, rgba(227,36,43,0.05) 0%, transparent 50%);
+  animation: coverPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes coverPulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.cover-badge {
+  display: inline-block;
+  border: 1px solid var(--muted-light);
+  padding: 0.4rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.cover-tcl {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(4rem, 12vw, 9rem);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.5rem;
+}
+
+.cover-tcl .c-arrow {
+  display: inline-block;
+  position: relative;
+}
+
+.cover-tcl .c-arrow::after {
+  content: '›';
+  position: absolute;
+  left: 50%; top: 52%;
+  transform: translate(-50%, -50%);
+  font-size: 0.55em;
+  color: var(--red);
+}
+
+.cover-subtitle {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 3rem;
+}
+
+.cover-meta {
+  position: relative; z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.cover-meta span {
+  font-size: 0.8rem;
+  color: var(--muted-light);
+  font-weight: 400;
+}
+
+/* ===== CONTENT SLIDES ===== */
+.section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  background: var(--red);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+}
+
+.slide h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  max-width: 700px;
+}
+
+.slide h2 em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.slide h3 {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  color: var(--offwhite);
+  margin-bottom: 0.6rem;
+}
+
+.slide p {
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 600px;
+}
+
+/* ===== GRID LAYOUTS ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--dark);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(227,36,43,0.3);
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+  margin-bottom: 0.8rem;
+}
+
+.card-tag.market { background: rgba(76,175,80,0.15); color: var(--green); }
+.card-tag.social { background: rgba(66,165,245,0.15); color: var(--blue); }
+.card-tag.search { background: rgba(255,152,0,0.15); color: var(--orange); }
+
+.card h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--offwhite);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.card p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: none;
+}
+
+/* ===== SIGNAL CARDS ===== */
+.signal-card {
+  background: var(--dark);
+  border-left: 3px solid var(--red);
+  border-radius: 0 14px 14px 0;
+  padding: 1.3rem 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.signal-card:hover { transform: translateX(4px); }
+
+.signal-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  background: var(--red);
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+}
+
+.signal-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--offwhite);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.signal-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+  padding-left: calc(22px + 0.5rem);
+  max-width: none;
+}
+
+/* ===== HYPOTHESIS BOX ===== */
+.hypo-box {
+  background: linear-gradient(135deg, var(--red-dark), var(--red));
+  border-radius: 16px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 700px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hypo-box::before {
+  content: '\201C';
+  position: absolute;
+  top: -20px; left: 15px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 10rem;
+  opacity: 0.12;
+  color: var(--white);
+  line-height: 1;
+}
+
+.hypo-box p {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-style: italic;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.92);
+  position: relative;
+  z-index: 1;
+  max-width: none;
+}
+
+.hypo-label {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.8rem;
+  opacity: 0.6;
+}
+
+/* ===== QUESTION BOX ===== */
+.question-box {
+  border: 2px solid var(--red);
+  border-radius: 16px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 700px;
+  text-align: center;
+}
+
+.question-box p {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--offwhite);
+  line-height: 1.5;
+  max-width: none;
+}
+
+.question-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+/* ===== DISTINCTION BOXES ===== */
+.distinction-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .distinction-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.dist-item {
+  background: var(--dark);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.dist-item.active {
+  border-color: var(--red);
+  background: var(--red-light);
+}
+
+.dist-emoji { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+.dist-item strong {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--offwhite);
+  margin-bottom: 0.2rem;
+}
+
+.dist-item span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* ===== STAT ROW ===== */
+.stats-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.stat {
+  text-align: left;
+}
+
+.stat-val {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--red);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+/* ===== FOOTER SLIDE ===== */
+.slide-footer {
+  text-align: center;
+}
+
+.methods-tag {
+  display: inline-block;
+  border: 1px solid var(--muted-light);
+  padding: 0.3rem 0.9rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 0.3rem;
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in:nth-child(2) { transition-delay: 0.1s; }
+.fade-in:nth-child(3) { transition-delay: 0.2s; }
+.fade-in:nth-child(4) { transition-delay: 0.3s; }
+.fade-in:nth-child(5) { transition-delay: 0.4s; }
+.fade-in:nth-child(6) { transition-delay: 0.5s; }
+
+/* ===== DECORATIVE LINE ===== */
+.red-line {
+  width: 40px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- SLIDE 0 — COVER -->
+<section class="slide slide-cover" id="s0">
+  <div class="cover-badge fade-in">Fiche de veille stratégique</div>
+  <div class="cover-tcl fade-in">T<span class="c-arrow">C</span>L</div>
+  <div class="cover-subtitle fade-in">Acteur de la mobilité verte à Lyon</div>
+  <div class="cover-meta fade-in">
+    <span>Sup de Pub Lyon</span>
+    <span>Avril 2026</span>
+    <span>Veille sociétale & sectorielle</span>
+  </div>
+</section>
+
+<!-- SLIDE 1 — SUJET -->
+<section class="slide" id="s1">
+  <div class="slide-label"><span>01</span> — Sujet</div>
+  <div class="section-num fade-in">1</div>
+  <h2 class="fade-in">Un réseau <em>unifié</em>,<br>une ambition <em>verte</em></h2>
+  <p class="fade-in">Depuis septembre 2025, TCL, Cars du Rhône et Libellule ne font plus qu'un : un seul réseau, un seul titre, 262 communes, 2 millions d'habitants.</p>
+  <div class="stats-row fade-in">
+    <div class="stat">
+      <div class="stat-val">40%</div>
+      <div class="stat-label">des bus électriques<br>ou bioGNV en 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">400</div>
+      <div class="stat-label">véhicules propres<br>commandés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">2,55 Md€</div>
+      <div class="stat-label">plan de mandat<br>Destinations 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">100%</div>
+      <div class="stat-label">flotte propre<br>objectif 2035</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2 — SOURCES (1/2) -->
+<section class="slide" id="s2">
+  <div class="slide-label"><span>02</span> — Sources</div>
+  <div class="section-num fade-in">2</div>
+  <h2 class="fade-in">5 sources <em>identifiées</em></h2>
+  <div class="grid-2 fade-in">
+    <div class="card">
+      <span class="card-tag market">Marché</span>
+      <h4>SYTRAL Mobilités</h4>
+      <p>Site officiel. Feuille de route décarbonation, déploiement trolleybus IMC, objectifs flotte propre.</p>
+    </div>
+    <div class="card">
+      <span class="card-tag market">Marché</span>
+      <h4>LyonMag / Lyon Capitale</h4>
+      <p>Presse locale. Perception usagers, tensions politiques, enquête mobilité 30 000 personnes (résultats 2027).</p>
+    </div>
+    <div class="card">
+      <span class="card-tag search">Search</span>
+      <h4>Application TCL</h4>
+      <p>Recherche multimodale TCL + Vélo'v + TER. Les avis utilisateurs = baromètre brut de la satisfaction.</p>
+    </div>
+    <div class="card">
+      <span class="card-tag social">Social</span>
+      <h4>La Ville à Vélo Lyon</h4>
+      <p>Revendication d'un abonnement unique TCL + Vélo'v. Signal fort de la société civile sur l'intermodalité.</p>
+    </div>
+  </div>
+  <div class="grid-2 fade-in" style="margin-top:0">
+    <div class="card">
+      <span class="card-tag social">Social</span>
+      <h4>Agence des Mobilités — Métropole</h4>
+      <p>Offre Découverte : 3 mois gratuits TCL + Citiz + Vélo'v + covoiturage. Stratégie de conversion des automobilistes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 — SIGNAUX FAIBLES -->
+<section class="slide" id="s3">
+  <div class="slide-label"><span>03</span> — Signaux faibles</div>
+  <div class="section-num fade-in">3</div>
+  <h2 class="fade-in">3 signaux faibles <em>repérés</em></h2>
+  <div class="grid-3 fade-in">
+    <div class="signal-card">
+      <div class="signal-title"><span class="signal-num">1</span>Abonnement unique TCL + Vélo'v</div>
+      <div class="signal-desc">L'usager raisonne en « budget mobilité global », pas par mode isolé. Le SYTRAL pourrait devenir une plateforme MaaS locale.</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-title"><span class="signal-num">2</span>Trolleybus IMC = sobriété techno</div>
+      <div class="signal-desc">Lyon réutilise l'existant (lignes aériennes) plutôt que le tout-batterie. 40 % d'autonomie sans fil. Modèle exportable.</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-title"><span class="signal-num">3</span>Enquête mobilité 2025-2026</div>
+      <div class="signal-desc">30 000 personnes interrogées. Si le vélo grignote des parts modales au bus, le SYTRAL devra pivoter vers un écosystème intégré.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 — DISTINCTION -->
+<section class="slide" id="s4">
+  <div class="slide-label"><span>04</span> — Analyse</div>
+  <div class="section-num fade-in">✦</div>
+  <h2 class="fade-in">Tendance, mode,<br>innovation ou <em>buzz</em> ?</h2>
+  <p class="fade-in">La mobilité verte TCL est une <strong style="color:var(--offwhite)">tendance de fond</strong> : investissements irréversibles, cadre réglementaire contraignant (ZFE Lyon juillet 2026), mouvement sociétal durable.</p>
+  <div class="distinction-grid fade-in">
+    <div class="dist-item active">
+      <div class="dist-emoji">📈</div>
+      <strong>Tendance</strong>
+      <span>Durable, structurel,<br>multi-facteurs</span>
+    </div>
+    <div class="dist-item">
+      <div class="dist-emoji">👗</div>
+      <strong>Mode</strong>
+      <span>Éphémère,<br>esthétique</span>
+    </div>
+    <div class="dist-item">
+      <div class="dist-emoji">💡</div>
+      <strong>Innovation</strong>
+      <span>Rupture techno,<br>pas encore massive</span>
+    </div>
+    <div class="dist-item">
+      <div class="dist-emoji">📣</div>
+      <strong>Buzz</strong>
+      <span>Forte visibilité,<br>faible durabilité</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 — HYPOTHÈSE -->
+<section class="slide" id="s5">
+  <div class="slide-label"><span>05</span> — Hypothèse</div>
+  <div class="section-num fade-in">4</div>
+  <h2 class="fade-in">Notre <em>hypothèse</em></h2>
+  <div class="hypo-box fade-in">
+    <p>
+      <span class="hypo-label">Hypothèse de tendance</span>
+      D'ici 2030, les TCL ne seront plus un « réseau de bus et de métro » mais la plateforme centrale de mobilité verte de Lyon, intégrant transports en commun, vélo, autopartage et covoiturage sous un titre unique. La convergence ZFE + baisse des coûts VE + essor du MaaS transformera la voiture thermique d'un standard en une exception dans la métropole.
+    </p>
+  </div>
+</section>
+
+<!-- SLIDE 6 — QUESTION -->
+<section class="slide" id="s6">
+  <div class="slide-label"><span>06</span> — Question stratégique</div>
+  <div class="section-num fade-in">5</div>
+  <h2 class="fade-in">La question à poser en <em>comité stratégique</em></h2>
+  <div class="question-box fade-in">
+    <span class="question-label">Question stratégique</span>
+    <p>Comment les TCL peuvent-ils passer d'un réseau de transport public à une marque-plateforme de mobilité verte, capable de fédérer l'ensemble des modes doux sous un titre unique et de capter les non-usagers encore dépendants de la voiture individuelle ?</p>
+  </div>
+</section>
+
+<!-- SLIDE 7 — CLOSING -->
+<section class="slide slide-footer" id="s7">
+  <div class="slide-label"><span>07</span> — Méthodes</div>
+  <div class="red-line fade-in" style="margin:0 auto 1.5rem"></div>
+  <h2 class="fade-in" style="margin:0 auto 1.5rem;text-align:center">Merci</h2>
+  <p class="fade-in" style="margin:0 auto 2rem;text-align:center;max-width:500px">Méthodes mobilisées pour cette veille stratégique :</p>
+  <div class="fade-in" style="text-align:center">
+    <span class="methods-tag">Benchmark</span>
+    <span class="methods-tag">Observation des usages</span>
+    <span class="methods-tag">Analyse de discours</span>
+    <span class="methods-tag">Cartographie des sources</span>
+  </div>
+  <p class="fade-in" style="margin:2rem auto 0;text-align:center;font-size:0.8rem;color:var(--muted-light)">
+    Sup de Pub Lyon — Bachelor Brand Strategy — Avril 2026
+  </p>
+</section>
+
+<script>
+// Nav dots
+const slides = document.querySelectorAll('.slide');
+const navDots = document.getElementById('navDots');
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.setAttribute('aria-label', `Slide ${i + 1}`);
+  dot.onclick = () => slides[i].scrollIntoView({ behavior: 'smooth' });
+  navDots.appendChild(dot);
+});
+
+// Intersection observer for animations & active dot
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Animate fade-in elements
+      entry.target.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+      // Update active dot
+      const idx = [...slides].indexOf(entry.target);
+      document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.4 });
+
+slides.forEach(s => observer.observe(s));
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  const current = [...slides].findIndex(s => {
+    const r = s.getBoundingClientRect();
+    return r.top >= -100 && r.top < window.innerHeight / 2;
+  });
+  if (e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault();
+    if (current < slides.length - 1) slides[current + 1].scrollIntoView({ behavior: 'smooth' });
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (current > 0) slides[current - 1].scrollIntoView({ behavior: 'smooth' });
+  }
+});
+</script>
+</body>
+</html>
